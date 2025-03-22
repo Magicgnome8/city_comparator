@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>City Comparator (Offline AI)</title>
+  <title>City Comparator (Fast Model)</title>
   <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.7.0"></script>
   <style>
     body {
@@ -27,7 +27,7 @@
   </style>
 </head>
 <body>
-  <h1>City Comparator</h1>
+  <h1>City Comparator (Fast Version)</h1>
   <p>Enter two cities, and the AI will guess what they might have in common (offline demo).</p>
   <input type="text" id="city1" placeholder="First city">
   <input type="text" id="city2" placeholder="Second city">
@@ -38,7 +38,7 @@
     let generator;
 
     async function loadModel() {
-      generator = await window.transformers.pipeline('text-generation', 'Xenova/distilgpt2');
+      generator = await window.transformers.pipeline('text-generation', 'Xenova/tiny-random-GPT2');
       document.getElementById('output').textContent = 'Model loaded. You can compare cities now.';
     }
 
