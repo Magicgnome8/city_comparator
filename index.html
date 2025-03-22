@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Comparator (Offline AI)</title>
+  <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.7.0"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 1rem;
+      margin: 5px 0;
+      width: 100%;
+    }
+    #output {
+      margin-top: 20px;
+      background: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>City Comparator</h1>
+  <p>Enter two cities, and the AI will guess what they might have in common (offline demo).</p>
+  <input type="text" id="city1" placeholder="First city">
+  <input type="text" id="city2" placeholder="Second city">
+  <button id="compareBtn">Compare</button>
+  <div id="output">Loading model, please wait...</div>
+
+  <script>
+    let generator;
+
+    async function loadModel() {
+      generator = await window.transformers.pipeline('text-generation', 'Xenova/distilgpt2');
+      document.getElementById('output').textContent = 'Model loaded. You can compare cities now.';
+    }
+
+    async function compareCities() {
+      const city1 = document.getElementById('city1').value.trim();
+      const city2 = document.getElementById('city2').value.trim();
+      const output = document.getElementById('output');
+
+      if (!city1 || !city2) {
+        output.textContent = 'Please enter two cities.';
+        return;
+      }
+
+      const prompt = `What do ${city1} and ${city2} have in common?`;
+      output.textContent = 'Thinking...';
+
+      const result = await generator(prompt, { max_new_tokens: 50 });
+      output.textContent = result[0].generated_text.replace(prompt, '');
+    }
+
+    document.getElementById('compareBtn').addEventListener('click', compareCities);
+    loadModel();
+  </script>
+</body>
+</html>
